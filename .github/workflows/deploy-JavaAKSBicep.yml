@@ -77,7 +77,6 @@ jobs:
          kubectl run petclinicaks --image=petclinicaksacraz.azurecr.io/petclinic
          kubectl expose pod petclinicaks --type=LoadBalancer --port=80 --target-port=8080
          kubectl get pods -A
-        azPSVersion: "latest"
 
      # Re-Build Java Application
      - name: Re-Build Java Application
@@ -97,4 +96,3 @@ jobs:
        with:
         inlineScript: | 
          kubectl get service petclinicaks
-        azPSVersion: "latest"
