@@ -38,11 +38,13 @@ jobs:
      - name: 'Checkout GitHub Action'
        uses: actions/checkout@main
           
-     - name: 'Login via Azure CLI'
+     - name: Login to Azure US Gov Cloud with CLI
        uses: azure/login@v1
        with:
-            creds: ${{ secrets.AZURE_CREDENTIALS }}
-            
+        creds: ${{ secrets.AZURE_US_GOV_CREDENTIALS }}
+        environment: 'AzureUSGovernment'
+        enable-AzPSSession: false
+
      - name: Azure CLI -Deploy Bicep Files
        uses: Azure/CLI@v1
        with:
