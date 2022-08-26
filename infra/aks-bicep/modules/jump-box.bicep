@@ -3,7 +3,7 @@ param vmName string
 param adminPassword string 
 param adminUsername string = 'azureuser'
 param subnetId string
-param location string = 'eastus'
+param location string = 'usgovvirginia'
 param cloudInit string = '''
 #cloud-config
 

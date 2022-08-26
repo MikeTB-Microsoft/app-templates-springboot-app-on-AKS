@@ -2,7 +2,7 @@ param aksClusterName string
 param subnetId string
 param adminUsername string = 'azureuser'
 param adminPublicKey string
-param location string = 'eastus'
+param location string = 'usgovvirginia'
 
 param aksSettings object = {
   kubernetesVersion: null

@@ -2,7 +2,7 @@ targetScope='subscription'
 //
 // resource group parameters
 param rgName string = 'petclinicaks-rg'
-param location string = 'eastus'
+param location string = 'usgovvirginia'
 
 // vnet parameters
 param vnetName string = 'vnet-aks'

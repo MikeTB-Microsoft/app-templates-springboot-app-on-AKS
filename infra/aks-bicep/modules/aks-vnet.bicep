@@ -5,7 +5,7 @@ param ilbSubnetPrefix string
 param bastionSubnetPrefix string
 param fwSubnetPrefix string
 param mgmtSubnetPrefix string
-param location string = 'eastus'
+param location string = 'usgovvirginia'
 
 resource aksRouteTable 'Microsoft.Network/routeTables@2020-07-01' = {
   name: 'aksRouteTable'
