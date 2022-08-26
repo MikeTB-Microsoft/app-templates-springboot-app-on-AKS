@@ -67,7 +67,7 @@ jobs:
 
      # Azure Powershell Cli - ACR Login, Tag Image, Push Image, Update ACR, Attach ACR to Cluster, Create Pod
      - name: Azure Powershell Cli - ACR Login, Tag Image, Push Image, Update ACR, Attach ACR to Cluster, Create Pod
-       uses: Azure/CLI@v1
+       uses: azure/powershell@v1
        with:
         inlineScript: |
          #!/bin/bash
