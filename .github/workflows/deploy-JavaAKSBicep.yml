@@ -74,6 +74,16 @@ jobs:
          az acr login --name petclinicaksacraz
          docker tag docker.io/library/spring-petclinic:2.7.0-SNAPSHOT petclinicaksacraz.azurecr.io/petclinic
          docker push petclinicaksacraz.azurecr.io/petclinic
+        azPSVersion: "latest"
+
+     # Set the target AKS cluster.
+     - uses: Azure/aks-set-context@v1
+       with:
+        creds: '${{ secrets.AZURE_CREDENTIALS }}'
+        cluster-name: aks-cluster
+        resource-group: petclinicaks-rg
+        inlineScript: |
+         #!/bin/bash
          az aks get-credentials --resource-group petclinicaks-rg --name aks-cluster
          az aks update --resource-group=petclinicaks-rg --name=aks-cluster --attach-acr petclinicaksacraz
          kubectl run petclinicaks --image=petclinicaksacraz.azurecr.io/petclinic
