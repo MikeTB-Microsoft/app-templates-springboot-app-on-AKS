@@ -65,8 +65,8 @@ jobs:
        run: |
         mvn spring-boot:build-image
 
-     # Azure Powershell Cli - ACR Login, Tag Image, Push Image, Update ACR, Attach ACR to Cluster, Create Pod
-     - name: Azure Powershell Cli - ACR Login, Tag Image, Push Image, Update ACR, Attach ACR to Cluster, Create Pod
+     # Azure Powershell Cli - ACR Login, Tag Image, Push Image 
+     - name: Azure Powershell Cli - ACR Login, Tag Image, Push Image
        uses: azure/powershell@v1
        with:
         inlineScript: |
@@ -84,8 +84,8 @@ jobs:
         cluster-name: aks-cluster
         resource-group: petclinicaks-rg
         
-     # Azure Powershell Cli - ACR Login, Tag Image, Push Image, Update ACR, Attach ACR to Cluster, Create Pod
-     - name: Azure Powershell Cli - ACR Login, Tag Image, Push Image, Update ACR, Attach ACR to Cluster, Create Pod
+     # Azure Powershell Cli -  Update ACR, Attach ACR to Cluster, Create Service and Expose the Pod
+     - name: Azure Powershell Cli - Update ACR, Attach ACR to Cluster, Create Service and Expose the Pod
        uses: azure/powershell@v1
        with:
         inlineScript: |
