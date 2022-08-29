@@ -10,7 +10,6 @@
 #
 # Secrets required to be in place:
 # - AZURE_CREDENTIALS
-#
 
 name: Build and Deploy Application
 env:
@@ -79,7 +78,7 @@ jobs:
 
      # Set the target AKS cluster.
      - name: Set the target AKS cluster.
-     - uses: Azure/aks-set-context@v1
+       uses: Azure/aks-set-context@v1
        with:
         creds: '${{ secrets.AZURE_CREDENTIALS }}'
         cluster-name: aks-cluster
