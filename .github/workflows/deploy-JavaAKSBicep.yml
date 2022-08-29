@@ -77,6 +77,7 @@ jobs:
         azPSVersion: "latest"
 
      # Set the target AKS cluster.
+     - name: Set the target AKS cluster.
      - uses: Azure/aks-set-context@v1
        with:
         creds: '${{ secrets.AZURE_CREDENTIALS }}'
