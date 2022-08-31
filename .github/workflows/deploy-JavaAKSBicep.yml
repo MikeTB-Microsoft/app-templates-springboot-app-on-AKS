@@ -9,7 +9,7 @@
 # - Verify your container image
 #
 # Secrets required to be in place:
-# - AZURE_CREDENTIALS
+# - AZURE_CREDENTIALS -
 
 name: Build and Deploy Application
 env:
