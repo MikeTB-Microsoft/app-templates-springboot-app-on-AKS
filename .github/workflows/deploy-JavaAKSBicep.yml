@@ -15,6 +15,7 @@ name: Build and Deploy Application
 env:
   DEPLOYMENT_NAME: "petclinicaks"
   DEPLOYMENT_REGION: "eastus"
+  LOCATION: "eastus"
   ACR_NAME: "petclinicaksacr23"
   CLUSTER_NAME: "aks-cluster"
   RESOURCE_GROUP: "petclinicaks-rg"
@@ -46,8 +47,8 @@ jobs:
        with:
         inlineScript: |
           #!/bin/bash
-          az deployment sub create --template-file ./infra/aks-bicep/main.bicep --parameters ./infra/aks-bicep/parameters.json --location eastus
-          az postgres server create --resource-group ${{ env.RESOURCE_GROUP }} --name petclinicaks-db  --location eastus--admin-user petclinicaksadmin --admin-password petclinicAKS123** --sku-name GP_Gen5_2
+          az deployment sub create --template-file ./infra/aks-bicep/main.bicep --parameters ./infra/aks-bicep/parameters.json --location ${{ env.LOCATION }}
+          az postgres server create --resource-group ${{ env.RESOURCE_GROUP }} --name petclinicaks-db  --location ${{ env.LOCATION }} --admin-user petclinicaksadmin --admin-password petclinicAKS123** --sku-name GP_Gen5_2
 
   build_Java_App: # Build the Java Application 
      runs-on: ubuntu-latest
