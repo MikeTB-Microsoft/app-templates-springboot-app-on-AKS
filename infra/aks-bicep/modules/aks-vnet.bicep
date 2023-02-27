@@ -5,26 +5,7 @@ param ilbSubnetPrefix string
 param bastionSubnetPrefix string
 param fwSubnetPrefix string
 param mgmtSubnetPrefix string
-param location string = 'usgovvirginia'
-
-resource aksRouteTable 'Microsoft.Network/routeTables@2020-07-01' = {
-  name: 'aksRouteTable'
-  location: location
-  properties: {
-    routes: [
-      {
-        properties: {
-          addressPrefix: '0.0.0.0/0'
-          nextHopType: 'VirtualAppliance'
-          nextHopIpAddress: '10.50.4.4'
-        }
-        name: 'defaultRoute'
-      }
-    ]
-    disableBgpRoutePropagation: true
-
-  }
-}
+param location string = 'eastus'
 
 
 resource vnet 'Microsoft.Network/virtualNetworks@2020-11-01' = {
@@ -41,9 +22,6 @@ resource vnet 'Microsoft.Network/virtualNetworks@2020-11-01' = {
         name: 'aks'
         properties:{
           addressPrefix: aksSubnetPrefix
-          routeTable:{
-            id: aksRouteTable.id
-          }
           privateEndpointNetworkPolicies: 'Disabled'
         }
       }

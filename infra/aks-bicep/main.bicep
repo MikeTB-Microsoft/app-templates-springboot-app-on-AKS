@@ -2,7 +2,7 @@ targetScope='subscription'
 //
 // resource group parameters
 param rgName string = 'petclinicaks-rg'
-param location string = 'usgovvirginia'
+param location string = 'eastus'
 
 // vnet parameters
 param vnetName string = 'vnet-aks'
@@ -39,87 +39,6 @@ param aksNetworkPolicy string = 'calico'
 
 // fw parameters
 param fwName string = 'aks-fw'
-var applicationRuleCollections = [
-  {
-    name: 'aksFirewallRules'
-    properties: {
-      priority: 100
-      action: {
-        type: 'allow'
-      }
-      rules: [
-        {
-          name: 'aksFirewallRules'
-          description: 'Rules needed for AKS to operate'
-          sourceAddresses: [
-            aksSubnetPrefix
-          ]
-          protocols: [
-            {
-              protocolType: 'Https'
-              port: 443
-            }
-            {
-              protocolType: 'Http'
-              port: 80
-            }
-          ]
-          targetFqdns: [
-            //'*.hcp.${rg.location}.azmk8s.io'
-            '*.hcp.eastus.azmk8s.io'
-            'mcr.microsoft.com'
-            '*.cdn.mcr.io'
-            '*.data.mcr.microsoft.com'
-            'management.azure.com'
-            'login.microsoftonline.com'
-            'dc.services.visualstudio.com'
-            '*.ods.opinsights.azure.com'
-            '*.oms.opinsights.azure.com'
-            '*.monitoring.azure.com'
-            'packages.microsoft.com'
-            'acs-mirror.azureedge.net'
-            'azure.archive.ubuntu.com'
-            'security.ubuntu.com'
-            'changelogs.ubuntu.com'
-            'launchpad.net'
-            'ppa.launchpad.net'
-            'keyserver.ubuntu.com'
-          ]
-        }
-      ]
-    }
-  }
-]
-
-var networkRuleCollections = [
-  {
-    name: 'ntpRule'
-    properties: {
-      priority: 100
-      action: {
-        type: 'allow'
-      }
-      rules: [
-        {
-          name: 'ntpRule'
-          description: 'Allow Ubuntu NTP for AKS'
-          protocols: [
-            'UDP'
-          ]
-          sourceAddresses: [
-            aksSubnetPrefix
-          ]
-          destinationAddresses: [
-            '*'
-          ]
-          destinationPorts: [
-            '123'
-          ]
-        }
-      ]
-    }
-  }
-]
 
 // acr parameters
 @allowed([
@@ -170,8 +89,6 @@ module fw 'modules/azfw.bicep' = {
     location: location
     fwName: fwName
     fwSubnetId: vnet.outputs.fwSubnetId
-    applicationRuleCollections: applicationRuleCollections
-    networkRuleCollections: networkRuleCollections
   }
 }
 
