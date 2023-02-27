@@ -13,7 +13,7 @@ param bastionSubnetPrefix string = '10.50.3.0/24'
 param fwSubnetPrefix string = '10.50.4.0/24'
 param mgmtSubnetPrefix string = '10.50.5.0/24'
 
-// jumpbox parameters
+// jumpbox parameters 
 param vmName string = 'aks-vm'
 @secure()
 param adminPassword string 
