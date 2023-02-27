@@ -47,13 +47,19 @@ jobs:
        with:
         inlineScript: |
           #!/bin/bash
-          az deployment sub create --template-file ./infra/aks-bicep/main.bicep --parameters ./infra/aks-bicep/parameters.json --location ${{ env.LOCATION }}
-          az postgres server create --resource-group ${{ env.RESOURCE_GROUP }} --name petclinicaks-db23  --location ${{ env.LOCATION }} --admin-user petclinicaksadmin --admin-password petclinicAKS123** --sku-name GP_Gen5_2
+          az deployment sub create --template-file ./infra/aks-bicep/main.bicep --parameters ./infra/aks-bicep/parameters.json --location eastus
+          az postgres server create --resource-group petclinicaks-rg --name petclinicaks-db23  --location eastus --admin-user petclinicaksadmin --admin-password petclinicAKS123** --sku-name GP_Gen5_2
 
   build_Java_App: # Build the Java Application 
      runs-on: ubuntu-latest
      needs: hub_networking_AKS_Cluster
      steps:
+     - name: Login to Azure 
+       uses: azure/login@v1
+       with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        environment: 'AzureCloud'
+        enable-AzPSSession: false
      - name: checkout code
        uses: actions/checkout@v3
      - name: Set up JDK 11
@@ -78,14 +84,14 @@ jobs:
        with:
         creds: '${{ secrets.AZURE_CREDENTIALS }}'
         cluster-name: ${{ env.CLUSTER_NAME }}
-        resource-group: ${{ env.RESOURCE_GROUP }}
+        resource-group: petclinicaks-rg
      - name: Azure Powershell Cli - Update ACR, Attach ACR to Cluster, Create Service and Expose the Pod
        uses: azure/powershell@v1
        with:
         inlineScript: |
          #!/bin/bash
-         az aks get-credentials --resource-group ${{ env.RESOURCE_GROUP }} --name ${{ env.CLUSTER_NAME }}
-         az aks update --resource-group=${{ env.RESOURCE_GROUP }} --name=${{ env.CLUSTER_NAME }} --attach-acr ${{ env.ACR_NAME }}
+         az aks get-credentials --resource-group petclinicaks-rg --name ${{ env.CLUSTER_NAME }}
+         az aks update --resource-group=petclinicaks-rg --name=${{ env.CLUSTER_NAME }} --attach-acr ${{ env.ACR_NAME }}
          kubectl run petclinicaks --image=petclinicaksacr23.azurecr.io/petclinic
          kubectl expose pod petclinicaks --type=LoadBalancer --port=80 --target-port=8080
          kubectl get pods -A
