@@ -67,9 +67,11 @@ jobs:
        with:
           java-version: '11'
           distribution: 'adopt'
+     # Build Java Application    
      - name: Build with Maven, compile and build the Docker image
        run: |
         mvn spring-boot:build-image
+     # Azure Powershell Cli - ACR Login, Tag Image, Push Image, Update ACR, Attach ACR to Cluster, Create Pod   
      - name: Azure Powershell Cli - ACR Login, Tag Image, Push Image
        uses: azure/powershell@v1
        with:
@@ -97,6 +99,7 @@ jobs:
          kubectl get pods -A
          kubectl get services -o=jsonpath='{.items[*].status.loadBalancer.ingress[0].ip}'
         azPSVersion: "latest"
+     # Re-Build Java Application  
      - name: Re-Build Java Application
        uses: actions/checkout@v3
      - name: Set up JDK 11
@@ -107,6 +110,7 @@ jobs:
      - name: Build with Maven, compile and build the Docker image
        run: |
         mvn spring-boot:build-image
+    # Azure Powershell Cli - Get deployment IP Address   
      - name: Azure Powershell Cli - Get deployment IP Address 
        uses: azure/powershell@v1
        with:
