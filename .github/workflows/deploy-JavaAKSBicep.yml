@@ -92,9 +92,10 @@ jobs:
          #!/bin/bash
          az aks get-credentials --resource-group petclinicaks-rg --name ${{ env.CLUSTER_NAME }}
          az aks update --resource-group=petclinicaks-rg --name=${{ env.CLUSTER_NAME }} --attach-acr ${{ env.ACR_NAME }}
-         kubectl run petclinicaks --image=petclinicaksacr23.azurecr.io/petclinic
+         kubectl run petclinicaks --image=petclinicaksacr23.azurecr.io/petclinic:latest
          kubectl expose pod petclinicaks --type=LoadBalancer --port=80 --target-port=8080
          kubectl get pods -A
+         kubectl get services -o=jsonpath='{.items[*].status.loadBalancer.ingress[0].ip}'
         azPSVersion: "latest"
      - name: Re-Build Java Application
        uses: actions/checkout@v3
@@ -111,4 +112,5 @@ jobs:
        with:
         inlineScript: | 
          kubectl get service petclinicaks
+         kubectl get services -o=jsonpath='{.items[*].status.loadBalancer.ingress[0].ip}'
         azPSVersion: "latest"
