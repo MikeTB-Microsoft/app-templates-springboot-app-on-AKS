@@ -47,7 +47,7 @@ param fwName string = 'aks-fw'
   'Premium'
 ])
 param acrSku string = 'Basic'
-param acrName string = 'petclinicaksacraz'
+param acrName string = 'petclinicaksacr23'
 
 
 // create resource group

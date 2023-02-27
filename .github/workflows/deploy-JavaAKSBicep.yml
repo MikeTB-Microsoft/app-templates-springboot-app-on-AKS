@@ -13,12 +13,11 @@
 
 name: Build and Deploy Application
 env:
-  # This is the global resource prefix for this deployment
-  # Use lower case letters and numbers only
   DEPLOYMENT_NAME: "petclinicaks"
-
-  # Azure region to which the resources will be deployed
-  DEPLOYMENT_REGION: "usgovvirginia"
+  DEPLOYMENT_REGION: "eastus"
+  ACR_NAME: "petclinicaksacr23"
+  CLUSTER_NAME: "aks-cluster"
+  RESOURCE_GROUP: "petclinicaks-rg"
 
 on:
   # Triggers the workflow on push events on the main branch
@@ -48,7 +47,7 @@ jobs:
         inlineScript: |
           #!/bin/bash
           az deployment sub create --template-file ./infra/aks-bicep/main.bicep --parameters ./infra/aks-bicep/parameters.json --location eastus
-          az postgres server create --resource-group petclinicaks-rg  --name petclinicaks-db  --location eastus--admin-user petclinicaksadmin --admin-password petclinicAKS123** --sku-name GP_Gen5_2
+          az postgres server create --resource-group ${{ env.RESOURCE_GROUP }} --name petclinicaks-db  --location eastus--admin-user petclinicaksadmin --admin-password petclinicAKS123** --sku-name GP_Gen5_2
 
   build_Java_App: # Build the Java Application 
      runs-on: ubuntu-latest
@@ -74,9 +73,9 @@ jobs:
        with:
         inlineScript: |
          #!/bin/bash
-         az acr login --name petclinicaksacraz
-         docker tag docker.io/library/spring-petclinic:2.7.0-SNAPSHOT petclinicaksacraz.azurecr.io/petclinic
-         docker push petclinicaksacraz.azurecr.io/petclinic
+         az acr login --name ${{env.ACR_NAME}}
+         docker tag docker.io/library/spring-petclinic:2.7.0-SNAPSHOT ${{env.ACR_NAME}}.azurecr.io/petclinic
+         docker push ${{env.ACR_NAME}}.azurecr.io/petclinic
         azPSVersion: "latest"
 
   aks_cluster_management: # Azure Powershell Cli - ACR Login, Tag Image, Push Image 
@@ -87,16 +86,16 @@ jobs:
        uses: Azure/aks-set-context@v1
        with:
         creds: '${{ secrets.AZURE_CREDENTIALS }}'
-        cluster-name: aks-cluster
-        resource-group: petclinicaks-rg
+        cluster-name: ${{ env.CLUSTER_NAME }}
+        resource-group: ${{ env.RESOURCE_GROUP }}
      - name: Azure Powershell Cli - Update ACR, Attach ACR to Cluster, Create Service and Expose the Pod
        uses: azure/powershell@v1
        with:
         inlineScript: |
          #!/bin/bash
-         az aks get-credentials --resource-group petclinicaks-rg --name aks-cluster
-         az aks update --resource-group=petclinicaks-rg --name=aks-cluster --attach-acr petclinicaksacraz
-         kubectl run petclinicaks --image=petclinicaksacraz.azurecr.io/petclinic
+         az aks get-credentials --resource-group ${{ env.RESOURCE_GROUP }} --name ${{ env.CLUSTER_NAME }}
+         az aks update --resource-group=${{ env.RESOURCE_GROUP }} --name=${{ env.CLUSTER_NAME }} --attach-acr ${{ env.ACR_NAME }}
+         kubectl run petclinicaks --image=${{env.ACR_NAME}}.azurecr.io/petclinic
          kubectl expose pod petclinicaks --type=LoadBalancer --port=80 --target-port=8080
          kubectl get pods -A
         azPSVersion: "latest"
