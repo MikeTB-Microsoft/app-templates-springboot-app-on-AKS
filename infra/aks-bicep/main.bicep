@@ -94,9 +94,6 @@ module fw 'modules/azfw.bicep' = {
 
 module aks 'modules/aks-cluster.bicep' = {
   name: aksClusterName
-  dependsOn: [
-    fw
-  ]
   scope: rg
   params: {    
     location: location

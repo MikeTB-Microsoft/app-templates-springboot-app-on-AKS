@@ -64,16 +64,6 @@ jobs:
      - name: Build with Maven, compile and build the Docker image
        run: |
         mvn spring-boot:build-image
-
-  acr_management: # Azure Powershell Cli - ACR Login, Tag Image, Push Image 
-     runs-on: ubuntu-latest
-     needs: build_Java_App
-     steps:
-     - name: Login to Azure 
-       uses: azure/login@v1
-       with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
-        environment: 'AzureCloud'
      - name: Azure Powershell Cli - ACR Login, Tag Image, Push Image
        uses: azure/powershell@v1
        with:
@@ -83,16 +73,6 @@ jobs:
          docker tag docker.io/library/spring-petclinic:2.7.0-SNAPSHOT petclinicaksacr23.azurecr.io/petclinic
          docker push petclinicaksacr23.azurecr.io/petclinic
         azPSVersion: "latest"
-
-  aks_cluster_management: # Azure Powershell Cli - ACR Login, Tag Image, Push Image 
-     runs-on: ubuntu-latest
-     needs: acr_management
-     steps:
-     - name: Login to Azure 
-       uses: azure/login@v1
-       with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
-        environment: 'AzureCloud' 
      - name: Set the target AKS cluster.
        uses: Azure/aks-set-context@v1
        with:
@@ -110,16 +90,6 @@ jobs:
          kubectl expose pod petclinicaks --type=LoadBalancer --port=80 --target-port=8080
          kubectl get pods -A
         azPSVersion: "latest"
-
-  get_ip: #  Get deployment IP Address 
-     runs-on: ubuntu-latest
-     needs: aks_cluster_management 
-     steps:
-     - name: Login to Azure 
-       uses: azure/login@v1
-       with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
-        environment: 'AzureCloud'
      - name: Re-Build Java Application
        uses: actions/checkout@v3
      - name: Set up JDK 11
