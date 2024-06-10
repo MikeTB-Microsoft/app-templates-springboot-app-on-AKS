@@ -5,7 +5,7 @@
 # - Create an Azure Container Registry 
 # - Push your app to the container registry
 # - Create a Kubernetes Cluster on AKS 
-# - Deploy the image to your Kubernetes cluster
+# - Deploy the image to your Kubernetes cluster,,
 # - Verify your container image
 #
 # Secrets required to be in place:
