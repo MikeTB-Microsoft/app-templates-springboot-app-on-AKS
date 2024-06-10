@@ -1,4 +1,4 @@
-# This workflow performs the following: Demo 2
+# This workflow performs the following: Demo 3
 # - Database configuration
 # - Provisioning Azure Services  
 # - Create the spring-petclinic-AKS App on Docker
