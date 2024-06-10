@@ -18,7 +18,7 @@ env:
   LOCATION: "eastus"
   ACR_NAME: "petclinicaksacr23"
   CLUSTER_NAME: "aks-cluster"
-  RESOURCE_GROUP: "petclinicaks-rg"
+  RESOURCE_GROUP: "/subscriptions/c3caea05-d40f-4cd5-a694-68a5bef3904d/resourceGroups/petclinicaks-rg"
 
 on:
   # Triggers the workflow on push events on the main branch
@@ -48,7 +48,7 @@ jobs:
         inlineScript: |
           #!/bin/bash
           az deployment sub create --template-file ./infra/aks-bicep/main.bicep --parameters ./infra/aks-bicep/parameters.json --location eastus
-          az postgres server create --resource-group petclinicaks-rg --name petclinicaks-db23  --location eastus --admin-user petclinicaksadmin --admin-password petclinicAKS123** --sku-name GP_Gen5_2
+          az postgres server create --resource-group ${{ env.RESOURCE_GROUP }} --name petclinicaks-db23  --location eastus --admin-user petclinicaksadmin --admin-password petclinicAKS123** --sku-name GP_Gen5_2
 
   build_Java_App: # Build the Java Application 
      runs-on: ubuntu-latest
@@ -86,14 +86,14 @@ jobs:
        with:
         creds: '${{ secrets.AZURE_CREDENTIALS }}'
         cluster-name: ${{ env.CLUSTER_NAME }}
-        resource-group: petclinicaks-rg
+        resource-group: ${{ env.RESOURCE_GROUP }}
      - name: Azure Powershell Cli - Update ACR, Attach ACR to Cluster, Create Service and Expose the Pod
        uses: azure/powershell@v1
        with:
         inlineScript: |
          #!/bin/bash
-         az aks get-credentials --resource-group petclinicaks-rg --name ${{ env.CLUSTER_NAME }}
-         az aks update --resource-group=petclinicaks-rg --name=${{ env.CLUSTER_NAME }} --attach-acr ${{ env.ACR_NAME }}
+         az aks get-credentials --resource-group ${{ env.RESOURCE_GROUP }} --name ${{ env.CLUSTER_NAME }}
+         az aks update --resource-group=${{ env.RESOURCE_GROUP }} --name=${{ env.CLUSTER_NAME }} --attach-acr ${{ env.ACR_NAME }}
          kubectl run petclinicaks --image=petclinicaksacr23.azurecr.io/petclinic:latest
          kubectl expose pod petclinicaks --type=LoadBalancer --port=80 --target-port=8080
          kubectl get pods -A
