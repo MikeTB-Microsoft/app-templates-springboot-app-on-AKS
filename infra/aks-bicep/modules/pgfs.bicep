@@ -1,4 +1,4 @@
-resource symbolicname 'Microsoft.DBforPostgreSQL/flexibleServers@2023-03-01-preview' = {
+resource pgfsDB 'Microsoft.DBforPostgreSQL/flexibleServers@2023-03-01-preview' = {
   name: 'pgfs-cbs'
   location: 'eastus'
 

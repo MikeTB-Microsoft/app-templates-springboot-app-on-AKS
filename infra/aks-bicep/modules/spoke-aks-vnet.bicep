@@ -18,26 +18,26 @@ resource vnet 'Microsoft.Network/virtualNetworks@2023-11-01' = {
     }
     subnets:[
       {
-        name: 'aks'
+        name: 'aksSubnet'
         properties:{
           addressPrefix: aksSubnetPrefix
           privateEndpointNetworkPolicies: 'Disabled'
         }
       }
       {
-        name: 'ilb'
+        name: 'acrSubnet'
         properties:{
           addressPrefix: acrSubnetPrefix
         }
       }
       {
-        name: 'AzureBastionSubnet'
+        name: 'kvSubnet'
         properties:{
           addressPrefix: kvSubnetPrefix
         }
       }
       {
-        name: 'AzureFirewallSubnet'
+        name: 'pgfsSubnet'
         properties:{
           addressPrefix: pgfsSubnetPrefix
         }

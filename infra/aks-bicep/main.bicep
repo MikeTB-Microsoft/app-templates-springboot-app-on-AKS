@@ -60,6 +60,9 @@ param kvName string = 'kvdemocbs'
 // pgfs parameters
 param pgfsName string = 'pgfs-cbs'
 
+// pgfs parameters
+param vnetPeeringName string = 'vnetPeering'
+
 // create resource group
 resource rg 'Microsoft.Resources/resourceGroups@2021-01-01' = {
   name: rgName
@@ -172,3 +175,7 @@ module pgfs 'modules/pgfs.bicep' = {
   scope: rg
 }
 
+module vnetPeering 'modules/vnet-peering.bicep' = {
+  name: vnetPeeringName
+  scope: rg
+}
