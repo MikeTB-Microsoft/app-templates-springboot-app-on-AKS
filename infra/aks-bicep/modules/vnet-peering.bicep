@@ -12,7 +12,7 @@ resource vnetPeering 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2
       ]
     }
     localSubnetNames: [
-      'ilb', 'AzureBastionSubnet', 'AzureFirewallSubnet', 'mgmt'
+      'ilb, AzureBastionSubnet, AzureFirewallSubnet, mgmt'
     ]
     localVirtualNetworkAddressSpace: {
       addressPrefixes: [
@@ -31,7 +31,7 @@ resource vnetPeering 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2
       virtualNetworkCommunity: 'hubvnetName, spokevnetName'
     }
     remoteSubnetNames: [
-      'aksSubnet', 'acrSubnet', 'kvSubnet', 'pgfsSubnet'
+      'aksSubnet, acrSubnet, kvSubnet, pgfsSubnet'
     ]
     remoteVirtualNetwork: {
       id: 'c3caea05-d40f-4cd5-a694-68a5bef3904d'
