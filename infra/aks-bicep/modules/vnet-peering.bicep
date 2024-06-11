@@ -34,7 +34,7 @@ resource vnetPeering 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2
       'aksSubnet', 'acrSubnet', 'kvSubnet', 'pgfsSubnet'
     ]
     remoteVirtualNetwork: {
-      id: '/subscriptions/c3caea05-d40f-4cd5-a694-68a5bef3904d/resourceGroups/petclinicaks-rg/'
+      id: 'c3caea05-d40f-4cd5-a694-68a5bef3904d'
     }
     remoteVirtualNetworkAddressSpace: {
       addressPrefixes: [
