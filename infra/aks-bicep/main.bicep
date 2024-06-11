@@ -61,7 +61,7 @@ param kvName string = 'kvdemocbs'
 param pgfsName string = 'pgfs-cbs'
 
 // pgfs parameters
-param vnetPeeringName string = 'vnetPeering'
+param vnetPeeringName string = 'vnetPeering/'
 
 // create resource group
 resource rg 'Microsoft.Resources/resourceGroups@2021-01-01' = {

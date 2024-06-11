@@ -1,5 +1,5 @@
 resource symbolicname 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2023-11-01' = {
-  name: 'vnetpeering/'
+  name: 'vnetPeering/'
   properties: {
     allowForwardedTraffic: true
     allowGatewayTransit: true
