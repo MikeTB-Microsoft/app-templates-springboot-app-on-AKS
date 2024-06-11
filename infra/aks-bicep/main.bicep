@@ -5,13 +5,18 @@ param rgName string = 'petclinicaks-rg'
 param location string = 'eastus'
 
 // vnet parameters
-param vnetName string = 'vnet-aks'
-param vnetPrefix string = '10.50.0.0/16'
-param aksSubnetPrefix string = '10.50.1.0/24'
-param ilbSubnetPrefix string = '10.50.2.0/24'
-param bastionSubnetPrefix string = '10.50.3.0/24'
-param fwSubnetPrefix string = '10.50.4.0/24'
-param mgmtSubnetPrefix string = '10.50.5.0/24'
+param hubvnetName string = 'hubvnet-aks'
+param spokevnetName string = 'spokevnet-aks'
+param hubvnetPrefix string = '10.50.0.0/16'
+param ilbSubnetPrefix string = '10.50.1.0/24'
+param bastionSubnetPrefix string = '10.50.2.0/24'
+param fwSubnetPrefix string = '10.50.3.0/24'
+param mgmtSubnetPrefix string = '10.50.4.0/24'
+param spokevnetPrefix string = '10.51.0.0/16'
+param aksSubnetPrefix string = '10.51.1.0/24'
+param acrSubnetPrefix string = '10.50.2.0/24'
+param kvSubnetPrefix string = '10.50.3.0/24'
+param pgfsdbSubnetPrefix string = '10.50.4.0/24'
 
 // jumpbox parameters 
 param vmName string = 'aks-vm'
@@ -49,6 +54,11 @@ param fwName string = 'aks-fw'
 param acrSku string = 'Basic'
 param acrName string = 'petclinicaksacr23'
 
+// kv parameters
+param kvName string = 'kvdemocbs'
+
+// pgfs parameters
+param pgfsName string = 'pgfs-cbs'
 
 // create resource group
 resource rg 'Microsoft.Resources/resourceGroups@2021-01-01' = {
@@ -56,28 +66,39 @@ resource rg 'Microsoft.Resources/resourceGroups@2021-01-01' = {
   location: location
 }
 
-module vnet 'modules/aks-vnet.bicep' = {
-  name: vnetName
+module hubvnet 'modules/aks-vnet.bicep' = {
+  name: hubvnetName
   scope: rg
   params: {
     location: location
-    vnetName: vnetName
-    vnetPrefix: vnetPrefix
-    aksSubnetPrefix: aksSubnetPrefix
+    vnetName: hubvnetName
+    vnetPrefix: hubvnetPrefix
     ilbSubnetPrefix: ilbSubnetPrefix
     bastionSubnetPrefix: bastionSubnetPrefix
     fwSubnetPrefix: fwSubnetPrefix
     mgmtSubnetPrefix: mgmtSubnetPrefix
   }
 }
-
+module spokevnet 'modules/spoke-aks-vnet.bicep' = {
+  name: spokevnetName
+  scope: rg
+  params: {
+    location: location
+    vnetName: spokevnetName
+    vnetPrefix: spokevnetPrefix
+    aksSubnetPrefix: aksSubnetPrefix
+    acrSubnetPrefix: acrSubnetPrefix
+    kvSubnetPrefix: kvSubnetPrefix
+    pgfsSubnetPrefix: pgfsdbSubnetPrefix
+  }
+}
 module vm 'modules/jump-box.bicep' = {
   name: vmName
   scope: rg
   params:{
     location: location
     vmName: vmName
-    subnetId: vnet.outputs.mgmtSubnetId
+    subnetId: hubvnet.outputs.mgmtSubnetId
    adminPassword: adminPassword
   }
 }
@@ -88,7 +109,7 @@ module fw 'modules/azfw.bicep' = {
   params: {
     location: location
     fwName: fwName
-    fwSubnetId: vnet.outputs.fwSubnetId
+    fwSubnetId: hubvnet.outputs.fwSubnetId
   }
 }
 
@@ -98,7 +119,7 @@ module aks 'modules/aks-cluster.bicep' = {
   params: {    
     location: location
     aksClusterName: aksClusterName
-    subnetId: vnet.outputs.aksSubnetId
+    subnetId: spokevnet.outputs.aksSubnetId
     adminPublicKey: adminPublicKey
 
     aksSettings: {
@@ -107,7 +128,7 @@ module aks 'modules/aks-cluster.bicep' = {
       kubernetesVersion: k8sVersion
       networkPlugin: 'azure'
       networkPolicy: aksNetworkPolicy
-      serviceCidr: '172.16.0.0/22' // can be reused in multiple clusters; no overlap with other IP ranges
+      serviceCidr: '10.51.1.0/24' // can be reused in multiple clusters; no overlap with other IP ranges
       dnsServiceIP: '172.16.0.10'
       dockerBridgeCidr: '172.16.4.1/22'
       outboundType: 'loadBalancer'
@@ -124,7 +145,7 @@ module aks 'modules/aks-cluster.bicep' = {
       vmSize: aksVmSize
       osDiskSizeGB: 50
       osDiskType: 'Ephemeral'
-      vnetSubnetID: vnet.outputs.aksSubnetId
+      vnetSubnetID: spokevnet.outputs.aksSubnetId
       osType: 'Linux'
       type: 'VirtualMachineScaleSets'
       mode: 'System'
@@ -141,3 +162,13 @@ module acr 'modules/acr.bicep' = {
     acrSku: acrSku
   }
 }
+module kv 'modules/key-vault.bicep' = {
+  name: kvName
+  scope: rg
+}
+
+module pgfs 'modules/pgfs.bicep' = {
+  name: pgfsName
+  scope: rg
+}
+

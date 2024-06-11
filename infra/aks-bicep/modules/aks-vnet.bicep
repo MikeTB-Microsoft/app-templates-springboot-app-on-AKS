@@ -1,6 +1,5 @@
 param vnetName string
 param vnetPrefix string
-param aksSubnetPrefix string
 param ilbSubnetPrefix string
 param bastionSubnetPrefix string
 param fwSubnetPrefix string
@@ -8,7 +7,7 @@ param mgmtSubnetPrefix string
 param location string = 'eastus'
 
 
-resource vnet 'Microsoft.Network/virtualNetworks@2020-11-01' = {
+resource vnet 'Microsoft.Network/virtualNetworks@2023-11-01' = {
   name: vnetName
   location: location
   properties:{
@@ -18,13 +17,6 @@ resource vnet 'Microsoft.Network/virtualNetworks@2020-11-01' = {
       ]
     }
     subnets:[
-      {
-        name: 'aks'
-        properties:{
-          addressPrefix: aksSubnetPrefix
-          privateEndpointNetworkPolicies: 'Disabled'
-        }
-      }
       {
         name: 'ilb'
         properties:{
