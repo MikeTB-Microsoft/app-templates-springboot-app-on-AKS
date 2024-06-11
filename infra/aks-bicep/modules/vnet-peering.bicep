@@ -1,4 +1,4 @@
-resource vnetPeering 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2023-11-01' = {
+resource symbolicname 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2023-11-01' = {
   name: 'vnetpeering/'
   properties: {
     allowForwardedTraffic: true
