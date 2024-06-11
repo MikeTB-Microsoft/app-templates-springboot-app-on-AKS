@@ -174,8 +174,3 @@ module pgfs 'modules/pgfs.bicep' = {
   name: pgfsName
   scope: rg
 }
-
-module vnetPeering 'modules/vnet-peering.bicep' = {
-  name: vnetPeeringName
-  scope: rg
-}
