@@ -5,7 +5,7 @@ metadata:
   labels:
     app: cbddevopsdemo01
     kubernetes.azure.com/generator: devhub
-  namespace: namespace-workflow-1718377392947
+  namespace: namespace-workflow-1718378497416
 spec:
   replicas: 1
   selector:
