@@ -1,6 +1,6 @@
 targetScope='subscription'
 //
-// resource group parameters
+// resource group parameters - cbsdemo
 param rgName string = 'petclinicaks-rg'
 param location string = 'eastus'
 
