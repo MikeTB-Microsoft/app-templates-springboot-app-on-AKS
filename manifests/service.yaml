@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: CBSDemoDevOps2
+  namespace: namespace-workflow-1718375748000
+  labels:
+    kubernetes.azure.com/generator: devhub
+spec:
+  type: LoadBalancer
+  selector:
+    app: CBSDemoDevOps2
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
