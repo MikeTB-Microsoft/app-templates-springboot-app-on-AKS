@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cbddevopsdemo01
+  name: cbddevopsdemo02
   labels:
-    app: cbddevopsdemo01
+    app: cbddevopsdemo02
     kubernetes.azure.com/generator: devhub
-  namespace: namespace-workflow-1718378497416
+  namespace: namespace-workflow-1718644181980
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: cbddevopsdemo01
+      app: cbddevopsdemo02
   template:
     metadata:
       labels:
-        app: cbddevopsdemo01
+        app: cbddevopsdemo02
     spec:
       containers:
-        - name: cbddevopsdemo01
-          image: cbsacr98.azurecr.io/cbspetclinicdemo:latest
+        - name: cbddevopsdemo02
+          image: cbsacr98.azurecr.io/cbsdemo2024:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
