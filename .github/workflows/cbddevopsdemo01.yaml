@@ -1,9 +1,9 @@
-name: cbddevopsdemo01
-"on":
-    push:
-        branches:
-            - main
-    workflow_dispatch: {}
+#name: cbddevopsdemo01
+#"on":
+#    push:
+#        branches:
+#            - main
+#    workflow_dispatch: {}
 env:
     ACR_RESOURCE_GROUP: rg-spoke-Demo-LZA-test-eastus
     AZURE_CONTAINER_REGISTRY: cbsacr98
