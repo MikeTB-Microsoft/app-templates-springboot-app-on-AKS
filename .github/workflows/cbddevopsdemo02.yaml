@@ -1,15 +1,15 @@
-#name: cbddevopsdemo01
-#"on":
-#    push:
-#        branches:
-#            - main
-#    workflow_dispatch: {}
+name: cbddevopsdemo02
+"on":
+    push:
+        branches:
+            - main
+    workflow_dispatch: {}
 env:
     ACR_RESOURCE_GROUP: rg-spoke-Demo-LZA-test-eastus
     AZURE_CONTAINER_REGISTRY: cbsacr98
     CLUSTER_NAME: CBS-Demo-AKS
     CLUSTER_RESOURCE_GROUP: rg-spoke-Demo-LZA-test-eastus
-    CONTAINER_NAME: cbspetclinicdemo
+    CONTAINER_NAME: cbspetclinicdemo2
     DEPLOYMENT_MANIFEST_PATH: |
         manifests/deployment.yaml
         manifests/service.yaml
@@ -62,4 +62,4 @@ jobs:
                 action: deploy
                 images: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.CONTAINER_NAME }}:${{ github.sha }}
                 manifests: ${{ env.DEPLOYMENT_MANIFEST_PATH }}
-                namespace: namespace-workflow-1718378497416
+                namespace: namespace-workflow-1718729719162
