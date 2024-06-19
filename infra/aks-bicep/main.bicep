@@ -1,5 +1,5 @@
 targetScope='subscription'
-//
+
 // resource group parameters - cbsdemo
 param rgName string = 'petclinicaks-rg'
 param location string = 'eastus'
@@ -60,7 +60,7 @@ param kvName string = 'kvdemocbs'
 // pgfs parameters
 param pgfsName string = 'pgfs-cbs'
 
-// pgfs parameters
+// peering parameters
 param vnetPeeringName string = 'vnetPeering/'
 
 // create resource group
@@ -95,6 +95,12 @@ module spokevnet 'modules/spoke-aks-vnet.bicep' = {
     pgfsSubnetPrefix: pgfsdbSubnetPrefix
   }
 }
+
+module vnetPeering 'modules/vnet-peering.bicep' = {
+  name: vnetPeeringName
+  scope: rg
+}
+
 module vm 'modules/jump-box.bicep' = {
   name: vmName
   scope: rg
@@ -165,6 +171,7 @@ module acr 'modules/acr.bicep' = {
     acrSku: acrSku
   }
 }
+
 module kv 'modules/key-vault.bicep' = {
   name: kvName
   scope: rg

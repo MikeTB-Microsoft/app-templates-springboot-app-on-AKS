@@ -1,0 +1,25 @@
+change:
+    name: Change Request Attributes
+    #environment: Test Env
+    runs-on: ubuntu-latest
+    # Below line can be used to set conditionals for modifying your pipeline as needed.
+    # if: ${{ github.event_name == 'pull_request'}}
+
+    steps:
+
+      - name: ServiceNow CI/CD (DevOps) Change Attributes
+        uses: ServiceNow/sncicd-apply-changes@2.0.0
+        env:
+          nowUsername: ${{ secrets.SN_USERNAME }}
+          nowPassword: ${{ secrets.SN_PASSWORD }}
+          nowSourceInstance: ${{ secrets.SN_DEV_INSTANCE }}
+          appSysID: ${{ secrets.SN_APP_SYSID }}
+          devops-integration-token: ${{ secrets.SN_DEVOPS_TOKEN }}
+          instance-url: ${{}}
+          tool-id: ${{}}
+          context-github: ${{}}
+          job-name: 'Change Request Attributes'
+          change-request: '{"setCloseCode":"true","attributes":{"short_description":"Automated Software Deployment"}}'
+          interval: '100'
+          timeout: '3600'
+          deployment-gate: '{"environment":"cbs-demo","jobName":Deploy"}'

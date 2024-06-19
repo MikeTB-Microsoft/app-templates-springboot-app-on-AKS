@@ -1,0 +1,42 @@
+ # 1. Bacic GITHUB Action call to install Helm Charts
+ - uses: azure/setup-helm@v4.2.0
+   with:
+     version: '<version>' # default is latest (stable)
+   id: install
+
+ # 2. GITHUB Action call to deploy Helm Charts
+steps:  
+      - name: 'check it out'
+        uses: actions/checkout@v3
+      - name: helm-deploy
+        uses: WyriHaximus/github-action-helm3@v2.0
+        with:
+          exec: helm upgrade logstash /github/workspace/elk/logstash/ --install --wait --atomic --namespace=default --set=app.name=logstash --values=/github/workspace/elk/logstash/values.yaml
+          kubeconfig: '${{ secrets.KUBECONFIG }}'
+
+
+ # 3. GITHUB Action call to install Helm Charts
+name: 'Helm tool installer'
+description: 'Install a specific version of helm binary. Acceptable values are latest or any semantic version string like 1.15.0'
+inputs:
+   version:
+      description: 'Version of helm'
+      required: true
+      default: 'latest'
+   token:
+      description: GitHub token. Used to be required to fetch the latest version
+      required: false
+      deprecationMessage: 'GitHub token is no longer required'
+      default: '${{ github.token }}'
+   downloadBaseURL:
+      description: 'Set the download base URL'
+      required: false
+      default: 'https://get.helm.sh'
+outputs:
+   helm-path:
+      description: 'Path to the cached helm binary'
+branding:
+   color: 'blue'
+runs:
+   using: 'node20'
+   main: 'lib/index.js'
