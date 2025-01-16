@@ -1,0 +1,107 @@
+{
+  "projectType": "azd",
+  "iacTypes": [
+    "bicep"
+  ],
+  "resources": [
+    {
+      "type": "azurecontainerapp",
+      "instances": [
+        {
+          "name": "apptemplatesspringbootapponaks"
+        }
+      ]
+    },
+    {
+      "type": "azuredatabaseformysql",
+      "instances": [
+        {
+          "name": "mysql0"
+        }
+      ]
+    },
+    {
+      "type": "azuredatabaseforpostgresql",
+      "instances": [
+        {
+          "name": "postgresql0"
+        }
+      ]
+    },
+    {
+      "type": "azurecacheforredis",
+      "instances": [
+        {
+          "name": "redis0"
+        }
+      ]
+    }
+  ],
+  "bindings": [
+    {
+      "source": "${azurecontainerapp.apptemplatesspringbootapponaks}",
+      "target": "${azuredatabaseformysql.mysql0}",
+      "connection": "secret",
+      "store": "",
+      "customKeys": {
+        "AZURE_MYSQL_HOST": "AZURE_MYSQL_HOST",
+        "AZURE_MYSQL_USER": "MYSQL_USER",
+        "AZURE_MYSQL_PASSWORD": "MYSQL_PASS",
+        "AZURE_MYSQL_DATABASE": "AZURE_MYSQL_DATABASE",
+        "AZURE_MYSQL_PORT": "AZURE_MYSQL_PORT",
+        "AZURE_MYSQL_SSL": "AZURE_MYSQL_SSL"
+      }
+    },
+    {
+      "source": "${azurecontainerapp.apptemplatesspringbootapponaks}",
+      "target": "${azuredatabaseforpostgresql.postgresql0}",
+      "connection": "secret",
+      "store": "",
+      "customKeys": {
+        "AZURE_POSTGRESQL_HOST": "AZURE_POSTGRESQL_HOST",
+        "AZURE_POSTGRESQL_USERNAME": "POSTGRES_USER",
+        "AZURE_POSTGRESQL_PASSWORD": "POSTGRES_PASS",
+        "AZURE_POSTGRESQL_DATABASE": "AZURE_POSTGRESQL_DATABASE",
+        "AZURE_POSTGRESQL_PORT": "AZURE_POSTGRESQL_PORT"
+      }
+    },
+    {
+      "source": "${azurecontainerapp.apptemplatesspringbootapponaks}",
+      "target": "${azurecacheforredis.redis0}",
+      "connection": "secret",
+      "store": "",
+      "customKeys": {
+        "AZURE_REDIS_CONNECTIONSTRING": "AZURE_REDIS_CONNECTIONSTRING",
+        "AZURE_REDIS_HOST": "AZURE_REDIS_HOST",
+        "AZURE_REDIS_PORT": "AZURE_REDIS_PORT",
+        "AZURE_REDIS_PASSWORD": "AZURE_REDIS_PASSWORD",
+        "AZURE_REDIS_SSL": "AZURE_REDIS_SSL",
+        "AZURE_REDIS_DATABASE": "AZURE_REDIS_DATABASE",
+        "AZURE_REDIS_KEY": "AZURE_REDIS_KEY"
+      }
+    }
+  ],
+  "services": [
+    {
+      "host": "${azurecontainerapp.apptemplatesspringbootapponaks}",
+      "language": "java",
+      "project": "./",
+      "port": "8080"
+    }
+  ],
+  "settings": [
+    {
+      "resource": "${azurecontainerapp.apptemplatesspringbootapponaks}",
+      "envs": [
+        {
+          "name": "MYSQL_URL",
+          "value": ""
+        },
+        {
+          "name": "POSTGRES_URL",
+          "value": ""
+        }
+      ]
+    }
+  ]
+}

@@ -1,12 +1,11 @@
-FROM maven:3-eclipse-temurin-8 as BUILD
+# Use an official OpenJDK runtime as a parent image
+FROM openjdk:11-jre-slim
 
-COPY . /usr/src/app
-RUN mvn --batch-mode -f /usr/src/app/pom.xml clean package
+# Set the working directory in the container
+WORKDIR /app
 
-FROM eclipse-temurin:8-jre
-ENV PORT 8080
-EXPOSE 8080
-COPY --from=BUILD /usr/src/app/target /opt/target
-WORKDIR /opt/target
+# Copy the executable JAR file to the container
+COPY target/my-spring-boot-app.jar /app/my-spring-boot-app.jar
 
-CMD ["/bin/bash", "-c", "find -type f -name '*-SNAPSHOT.jar' | xargs java -jar"]
+# Run the JAR file
+ENTRYPOINT ["java", "-jar", "/app/my-spring-boot-app.jar"]

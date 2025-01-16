@@ -1,4 +1,4 @@
-name: cbddevopsdemo02
+name: cbddevopsdemo02 - Demo 1
 "on":
     push:
         branches:
